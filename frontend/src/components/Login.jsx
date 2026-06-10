@@ -15,7 +15,11 @@ function Login({ onLoginSuccess, onSwitchToRegister }) {
         onLoginSuccess(response.data);
       }
     } catch (err) {
-      setError('Tên đăng nhập hoặc mật khẩu không đúng!');
+      if (err.code === 'ERR_NETWORK') {
+        setError('Không thể kết nối đến máy chủ. Vui lòng đảm bảo Backend đang chạy.');
+      } else {
+        setError('Tên đăng nhập hoặc mật khẩu không đúng!');
+      }
     }
   };
 

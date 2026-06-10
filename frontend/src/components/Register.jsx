@@ -13,7 +13,11 @@ function Register({ onRegisterSuccess, onSwitchToLogin }) {
       await api.post('/auth/register', { username, password, fullName });
       onRegisterSuccess();
     } catch (err) {
-      setError(err.response?.data?.message || 'Đăng ký thất bại!');
+      const errorMsg = err.response?.data?.message 
+        || err.response?.data?.error 
+        || (err.code === 'ERR_NETWORK' ? 'Không thể kết nối đến máy chủ. Vui lòng đảm bảo Backend đang chạy.' : null)
+        || 'Đăng ký thất bại!';
+      setError(errorMsg);
     }
   };
 

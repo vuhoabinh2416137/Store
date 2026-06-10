@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from '../api/axios';
 
-function Login({ onLoginSuccess, onSwitchToRegister }) {
+function Login({ onLoginSuccess, onSwitchToRegister, onClose }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -24,10 +24,11 @@ function Login({ onLoginSuccess, onSwitchToRegister }) {
   };
 
   return (
-    <div className="modal-overlay active">
-      <div className="modal">
+    <div className="modal-overlay active" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>Đăng Nhập</h3>
+          <button className="close-modal" onClick={onClose}>&times;</button>
         </div>
         <div className="modal-body">
           {error && <p style={{color: 'red', marginBottom: '10px'}}>{error}</p>}

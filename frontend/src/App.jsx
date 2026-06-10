@@ -162,6 +162,7 @@ function App() {
             setIsLoginModalOpen(false);
             setIsRegisterModalOpen(true);
           }}
+          onClose={() => setIsLoginModalOpen(false)}
         />
       )}
 
@@ -176,6 +177,7 @@ function App() {
             setIsRegisterModalOpen(false);
             setIsLoginModalOpen(true);
           }}
+          onClose={() => setIsRegisterModalOpen(false)}
         />
       )}
     </div>

@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -16,7 +18,13 @@ public class Product {
 
     private Double price;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "additional_image", columnDefinition = "TEXT")
+    private List<String> additionalImages = new ArrayList<>();
 
     // Constructors
     public Product() {}
@@ -43,4 +51,7 @@ public class Product {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public List<String> getAdditionalImages() { return additionalImages; }
+    public void setAdditionalImages(List<String> additionalImages) { this.additionalImages = additionalImages; }
 }

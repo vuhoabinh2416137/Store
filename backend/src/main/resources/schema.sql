@@ -14,7 +14,13 @@ CREATE TABLE IF NOT EXISTS products (
     name VARCHAR(255) NOT NULL,
     description VARCHAR(2000),
     price DOUBLE PRECISION NOT NULL,
-    image_url VARCHAR(255)
+    image_url TEXT
+);
+
+CREATE TABLE IF NOT EXISTS product_images (
+    product_id BIGINT NOT NULL,
+    additional_image TEXT,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS orders (

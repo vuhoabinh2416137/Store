@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Hero from './components/Hero';
-import ProductList from './components/ProductList';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import CustomerHome from './pages/CustomerHome';
+import AdminDashboard from './pages/AdminDashboard';
+import ProductDetails from './pages/ProductDetails';
+import Cart from './pages/Cart';
 import OrderModal from './components/OrderModal';
 import Login from './components/Login';
 import Register from './components/Register';
 import api from './api/axios';
+import { CartContext } from './context/CartContext';
 import './index.css';
 
 function App() {
@@ -16,6 +20,10 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [alert, setAlert] = useState(null);
   const [user, setUser] = useState(null);
+  
+  const { getCartCount } = React.useContext(CartContext);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check auth status
@@ -86,18 +94,22 @@ function App() {
     localStorage.removeItem('user');
     setUser(null);
     setAlert({ type: 'success', message: 'Đăng xuất thành công!' });
+    navigate('/');
   };
 
   return (
     <div>
       <header className="header">
         <div className="container header-content">
-          <a href="#" className="logo">LUX<span>BED</span></a>
+          <Link to="/" className="logo">RANDOM<span>STORE</span></Link>
           <nav className="navbar">
-            <a href="#home">Trang Chủ</a>
-            <a href="#products">Sản Phẩm</a>
+            <Link to="/">Trang Chủ</Link>
+            <Link to="/#products">Sản Phẩm</Link>
+            <Link to="/cart" style={{fontWeight: 'bold', color: 'var(--primary-color)'}}>
+              🛒 Giỏ Hàng ({getCartCount()})
+            </Link>
             {user && user.roles && user.roles.includes('ROLE_MANAGER') && (
-               <a href="#" style={{color: 'var(--primary-color)'}}>Quản Trị</a>
+               <Link to="/admin" style={{color: 'var(--primary-color)'}}>Quản Trị</Link>
             )}
             {user ? (
               <>
@@ -118,12 +130,16 @@ function App() {
         </div>
       )}
 
-      <Hero />
-      <ProductList products={products} onBuyClick={handleBuyClick} />
+      <Routes>
+        <Route path="/" element={<CustomerHome products={products} onBuyClick={handleBuyClick} />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart user={user} setIsLoginModalOpen={setIsLoginModalOpen} />} />
+        <Route path="/admin" element={<AdminDashboard user={user} />} />
+      </Routes>
 
       <footer className="footer" id="contact">
         <div className="container">
-          <p>&copy; 2026 LUXBED. All rights reserved.</p>
+          <p>&copy; 2026 RANDOM STORE. All rights reserved.</p>
         </div>
       </footer>
 
